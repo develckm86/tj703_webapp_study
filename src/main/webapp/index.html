@@ -5,8 +5,60 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1>안녕~ 웹 앱 서버야~ 수정 테스트</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet 이동</a>
+    <h1>안녕~ 웹 앱 서버야~ 수정 테스트</h1>
+    <br/>
+    <h2>수업 링크</h2>
+    <ul>
+        <li><a href="hello-servlet">Hello Servlet 이동</a></li>
+        <li><a href="resStudy.do">응답 수업</a></li>
+        <li><a href="reqStudy.do">요청 수업</a></li>
+
+        <li><a href="queryStringStudy.do?name=경민&age=39">쿼리스트링 수업(파라미터 name,age)</a></li>
+        <li><a href="errorStudy.do">에러 처리 수업</a></li>
+    </ul>
+    <h2>경로 수업</h2>
+    <ul>
+        <li>절대경로 :( https://naver.com, c://windows/.... ) 현재 위치와 무관하게 해당 경로의 리소스를 찾는다. </li>
+        <li>상대경로 : (/book.com) 현재 위치를 기준으로 최상위 경로로 이동해서 book.com 을 찾는다
+            <ol>
+                <li>현재위치 https://naver.com/store/detail/web/detail.do  =>  https://naver.com/book.com</li>
+                <li>현재위치 c://windows/store/detail/web/  => c://book.com </li>
+                <li>현재위치 /Users/desktop/tomcat/ =>  /book.com</li>
+            </ol>
+        </li>
+        <li>상대경로 : (./book.com  or  .book.com  or  book.com) 현재 경로에 있는 리소스 탐색
+            <ol>
+                <li>현재위치
+                    https://naver.com/store/detail/web/detail.do
+                    =>
+                    https://naver.com/store/detail/web/book.com
+                </li>
+                <li>현재위치 c://windows/store/detail/web/  => c://windows/store/detail/web/book.com </li>
+                <li>현재위치 /Users/desktop/tomcat/ =>  /Users/desktop/tomcat/book.com</li>
+            </ol>
+        </li>
+        <li>상대경로 : (../book.com  or  ..book.com ) 현재 경로의 이전 폴더에 있는 리소스 탐색
+            <ol>
+                <li>현재위치
+                    https://naver.com/store/detail/web/detail.do
+                    =>
+                    https://naver.com/store/detail/book.com
+                </li>
+                <li>현재위치 c://windows/store/detail/web/  => c://windows/store/detail/book.com </li>
+                <li>현재위치 /Users/desktop/tomcat/ =>  /Users/desktop/book.com</li>
+            </ol>
+        </li>
+        <li>상대경로 : (../../book.com) 현재 경로의 이전 폴더에 있는 리소스 탐색
+            <ol>
+                <li>현재위치
+                    https://naver.com/store/detail/web/detail.do
+                    =>
+                    https://naver.com/store/book.com
+                </li>
+                <li>현재위치 c://windows/store/detail/web/  => c://windows/store/book.com </li>
+                <li>현재위치 /Users/desktop/tomcat/ =>  /Users/book.com</li>
+            </ol>
+        </li>
+    </ul>
 </body>
 </html>
