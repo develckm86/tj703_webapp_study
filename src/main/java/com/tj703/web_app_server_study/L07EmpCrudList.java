@@ -61,7 +61,24 @@ public class L07EmpCrudList extends HttpServlet {
         out.println("<h2>사원 리스트</h2>");
         out.println("<a href='./empSignup.html'>사원 등록 폼</a>");
         out.println("<hr>");
-        out.println(empList);
+        out.println("<table>");
+        out.println("<tr>");
+        out.println("<th>사번</th>");
+        out.println("<th>이름</th>");
+        out.println("<th>성씨</th>");
+        out.println("<th>상세</th>");
+        out.println("</tr>");
+        for(Map emp:empList){
+            out.println("<tr>");
+            out.println("<td>"+emp.get("emp_no")+"</td>");
+            out.println("<td>"+emp.get("first_name")+"</td>");
+            out.println("<td>"+emp.get("last_name")+"</td>");
+            out.println("<td><a href='./empDetail.do?emp_no="+emp.get("emp_no")+"'>상세</a></td>");
+            out.println("</tr>");
+        }
+
+        out.println("</table>");
+
         out.println("</html>");
     }
 }
