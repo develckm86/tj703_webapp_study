@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>사원 등록 폼</title>
+</head>
+<body>
+  <h1>사원 등록 폼</h1>
+  <form action="empSignupAction.do" method="post">
+    <p>
+      <label>
+        사원번호 : <input type="text" name="emp_no" value="1">
+      </label>
+    </p>
+    <p>
+      <label>
+        이름 : <input type="text" name="first_name" value="경민">
+      </label>
+    </p>
+    <p>
+      <label>
+        성씨 : <input type="text" name="last_name" value="초이">
+      </label>
+    </p>
+    <p>
+      <label>
+        남성 : <input type="radio" name="gender" value="M" checked >
+      </label>
+      /
+      <label>
+        여성 : <input type="radio" name="gender" value="F">
+      </label>
+    </p>
+    <p>
+      <label>
+        탄생일 : <input type="date" name="birth_date" value="1986-05-25">
+      </label>
+    </p>
+    <p>
+      <label>
+        입사일 : <input type="date" name="birth_date" value="2013-06-21">
+      </label>
+    </p>
+    <p>
+      <button type="reset">초기화</button>
+      <button type="submit">제출</button>
+    </p>
+  </form>
+</body>
+</html>

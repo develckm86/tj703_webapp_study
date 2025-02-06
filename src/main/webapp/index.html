@@ -16,8 +16,38 @@
         <li><a href="queryStringStudy.do?name=경민&age=39">쿼리스트링 수업(파라미터 name,age)</a></li>
         <li><a href="errorStudy.do">에러 처리 수업</a></li>
         <li><a href="jdbcDeptList.do">jdbc 부서리스트 수업</a></li>
-
+        <li><a href="empCRUD.do">사원관리(CRUD) 웹앱 수업</a></li>
+        <li><a href="deptCRUD.do"> 부서관리 웹앱 제작 과제</a></li>
     </ul>
+    <div>
+        <h3>GET과 POST 차이점과 요청해더(request header body) 정보</h3>
+        <p>GET : 브라우저에서  link 나 url 로  서버에 리소스를 요청하는 행위 -> 리소스 주세요! </p>
+        <p>POST : 양식(form)을 제출해서 동적 리소스를 요청하는데 양식의 데이터를 파라미터로 전달하는 행위 -> 파라미터를 저장해 주세요!</p>
+        <p>요청해더 : 서버에게 리소스를 요청할때 클라이언트 내역과 요청하는 리소스에 대한 상세한 정보
+            => 서버가 어떻게 응답할 건지 판단 하도록 돕는다.
+        </p>
+        <p>post 방식으로 통신하면 파라미터(queryString)을 요청해더에 포함시켜 보냅니다.</p>
+        <form method="post" action="postStudy.do">
+            <p>
+                <label>
+                    유저아이디 :
+                    <input type="text" name="userId" value="경민">
+                </label>
+            </p>
+            <p>
+                <label>
+                    비밀번호 :
+                    <input type="password" name="userPw" value="123456!@">
+                </label>
+            </p>
+            <p>
+                <button type="button">그냥 버튼</button>
+                <button type="reset">양식 내부의 input 값을 최초값(default)으로 변경</button>
+                <button type="submit">제출</button>
+            </p>
+        </form>
+
+    </div>
     <h2>경로 수업</h2>
     <ul>
         <li>절대경로 :( https://naver.com, c://windows/.... ) 현재 위치와 무관하게 해당 경로의 리소스를 찾는다. </li>
