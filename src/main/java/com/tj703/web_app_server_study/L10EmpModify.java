@@ -70,7 +70,56 @@ public class L10EmpModify extends HttpServlet {
             out.println("<p><label>사원 생일 : <input type='date' value='"+emp.get("birth_date")+"' name='birth_date'></label></p>");
             out.println("<p><label>사원 입사일 : <input type='date'  value='"+emp.get("hire_date")+"' name='hire_date'></label></p>");
             out.println("<p><button type='reset'>초기화</button> &nbsp; <button>제출</button></p>");
+            out.println("<p><a href='empRemoveAction.do?emp_no="+emp.get("emp_no")+"'>사원 삭제</p>");
             out.println("</form>");
+            //1.L11EmpRemoveAction 클래스 만들고
+            //2.doGet 구현
+            //3. emp_no 파라미터 받고 (없거나 정수가 아니면 400)
+            //4. jdbc 로 삭제
+            //5. 성공 -> list, 실패 -> 수정페이지
+
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    //empSignup.do(L08EmpSignupAction)와 유사한데 파라미터를 이용해 수정 (Creat 와 Update 는 유사)
+        String empNoStr = req.getParameter("emp_no");
+        String birthDate = req.getParameter("birth_date");
+        String firstName = req.getParameter("first_name");
+        String lastName = req.getParameter("last_name");
+        String gender = req.getParameter("gender");
+        String hireDate = req.getParameter("hire_date");
+
+        String url="jdbc:mysql://localhost:3306/employees";
+        String username = "root";
+        String password = "mysqlmysql";
+        String driver = "com.mysql.cj.jdbc.Driver";
+        Connection conn=null;
+        PreparedStatement ps=null;
+        int update=0; //성공시 1
+        String sql="UPDATE employees SET first_name=?,last_name=?,gender=?,hire_date=?,birth_date=? WHERE emp_no=?";
+
+        try {
+            int empNo=Integer.parseInt(empNoStr);
+            Class.forName(driver);
+            conn= DriverManager.getConnection(url,username,password);
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,firstName);
+            ps.setString(2,lastName);
+            ps.setString(3,gender);
+            ps.setString(4,hireDate);
+            ps.setString(5,birthDate);
+            ps.setInt(6,empNo);
+            update=ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if(update>0){
+            resp.sendRedirect("./empDetail.do?emp_no="+empNoStr);
+        }else{
+            //실패
+            resp.sendRedirect("./empModify.do?emp_no="+empNoStr);
         }
     }
 }
