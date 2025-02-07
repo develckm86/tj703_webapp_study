@@ -78,6 +78,8 @@ public class L10EmpModify extends HttpServlet {
             //4. jdbc 로 삭제
             //5. 성공 -> list, 실패 -> 수정페이지
 
+        }else{
+            resp.sendRedirect("./empCRUD.do");
         }
     }
 
