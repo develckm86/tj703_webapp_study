@@ -8,13 +8,17 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 
-@WebServlet("/empDetail.do")
-public class L09EmpDetail extends HttpServlet {
+@WebServlet("/empModify.do")
+public class L10EmpModify extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            //수정페이지는 상세와 서비스(==db) 구현은 같은데 뷰만 다르다.
         String empNoStr=req.getParameter("emp_no");
         String sql="SELECT * FROM employees WHERE emp_no=?";
         String url="jdbc:mysql://localhost:3306/employees";
@@ -30,7 +34,7 @@ public class L09EmpDetail extends HttpServlet {
         try{
             int empNo=Integer.parseInt(empNoStr);
             Class.forName(driver);
-            conn=DriverManager.getConnection(url,username,password);
+            conn= DriverManager.getConnection(url,username,password);
             ps=conn.prepareStatement(sql);
             ps.setInt(1,empNo);
             rs=ps.executeQuery();
@@ -55,15 +59,18 @@ public class L09EmpDetail extends HttpServlet {
         if(emp!=null){
             resp.setContentType("text/html;charset=utf-8");
             PrintWriter out=resp.getWriter();
-            out.println("<h1>사원 상세</h1>");
-            out.println("<p>사원 번호 : "+emp.get("emp_no")+"</p>");
-            out.println("<p>사원 이름 : "+emp.get("first_name")+"</p>");
-            out.println("<p>사원 성씨 : "+emp.get("last_name")+"</p>");
-            out.println("<p>사원 성별 : "+emp.get("gender")+"</p>");
-            out.println("<p>사원 생일 : "+emp.get("birth_date")+"</p>");
-            out.println("<p>사원 입사일 : "+emp.get("hire_date")+"</p>");
-            out.println("<p><a href='./empModify.do?emp_no="+emp.get("emp_no")+"'>수정하기</a></p>");
+            out.println("<h1>사원 수정</h1>");
+            out.println("<form action=\"empModify.do\" method=\"post\">");
+            out.println("<p><label>사원 번호 : "+emp.get("emp_no")+"<input type='hidden' value='"+emp.get("emp_no")+"' name='emp_no'></label></p>");
+            out.println("<p><label>사원 이름 : <input value='"+emp.get("first_name")+"' name='first_name'></label></p>");
+            out.println("<p><label>사원 성씨 : <input value='"+emp.get("last_name")+"' name='last_name'></label></p>");
+            out.println("<p>사원 성별 : <label>남성 : <input value='M' "+( (emp.get("gender").equals("M")) ? "checked" : "")+" type=radio name='gender'></label>");
+            out.println("<label>여성 : <input value='F' "+( (emp.get("gender").equals("F")) ? "checked" : "")+" type=radio name='gender'></label></p>");
 
+            out.println("<p><label>사원 생일 : <input type='date' value='"+emp.get("birth_date")+"' name='birth_date'></label></p>");
+            out.println("<p><label>사원 입사일 : <input type='date'  value='"+emp.get("hire_date")+"' name='hire_date'></label></p>");
+            out.println("<p><button type='reset'>초기화</button> &nbsp; <button>제출</button></p>");
+            out.println("</form>");
         }
     }
 }
