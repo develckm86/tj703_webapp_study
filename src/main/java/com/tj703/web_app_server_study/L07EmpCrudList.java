@@ -18,6 +18,7 @@ import java.util.Map;
 public class L07EmpCrudList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String url="jdbc:mysql://localhost:3306/employees";
         String username="root";
         String password="mysqlmysql";
