@@ -34,10 +34,10 @@
       ></label>
     </p>
     <p>
-      <label>생일 :<input type="date" name="birth_date" value="1986-05-25" ></label>
+      <label>생일 :<input type="date" name="birth_date" value="<%=emp.getBirthDate()%>" ></label>
     </p>
     <p>
-      <label>입사일 :<input type="date" name="hire_date" value="2025-01-01"></label>
+      <label>입사일 :<input type="date" name="hire_date" value="<%=emp.getHireDate()%>"></label>
     </p>
     <p>
       <button type="reset">초기화</button>
