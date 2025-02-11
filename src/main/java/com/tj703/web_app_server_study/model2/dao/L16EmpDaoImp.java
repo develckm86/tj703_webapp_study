@@ -1,9 +1,10 @@
-package com.tj703.web_app_server_study;
+package com.tj703.web_app_server_study.model2.dao;
+
+import com.tj703.web_app_server_study.model2.dto.L17EmpDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,11 +72,26 @@ public class L16EmpDaoImp implements L16EmpDao {
 
     @Override
     public int update(L17EmpDto emp) throws Exception {
-        return 0;
+        int update=0;
+        String sql="UPDATE employees SET first_name=?,last_name=?,gender=?,hire_date=?,birth_date=? WHERE emp_no=?";
+        ps=conn.prepareStatement(sql);
+        ps.setString(1, emp.getFirstName());
+        ps.setString(2, emp.getLastName());
+        ps.setString(3, emp.getGender());
+        ps.setString(4, emp.getHireDate());
+        ps.setString(5, emp.getBirthDate());
+        ps.setInt(6, emp.getEmpNo());
+        update=ps.executeUpdate();
+        return update;
     }
 
     @Override
     public int deleteById(int empNo) throws Exception {
-        return 0;
+        int delete=0;
+        String sql="delete from employees where emp_no=?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, empNo);
+        delete=ps.executeUpdate();
+        return delete;
     }
 }

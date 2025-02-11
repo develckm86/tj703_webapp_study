@@ -1,25 +1,31 @@
 package com.tj703.web_app_server_study;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import com.tj703.web_app_server_study.model2.dao.L16EmpDaoImp;
+import com.tj703.web_app_server_study.model2.dto.L17EmpDto;
+import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import static org.junit.jupiter.api.Assertions.*;
 
 //model1: servlet 내부에 service+view
 //model2: servlet(Controller)과 service(Model)와 view가 분리된 디자인패턴 (MVC)
+//junit 에서 class 에 실행을 누르면 내부에 정의된 테스트가 동시에 실행되기 때문에 (멀티스레드)
+//@TestMethodOrder @Order 로 순서를 정할 수 있다.
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class L16EmpDaoImpTest {
     @Test
+    @Order(4)
     void findAll() throws Exception {
         System.out.println(new L16EmpDaoImp().findAll());
     }
 
     @Test
+    @Order(2)
     void findById() throws Exception {
         System.out.println(new L16EmpDaoImp().findById(9999));
     }
 
     @Test
+    @Order(1)
     void insert() throws Exception {
         L17EmpDto emp=new L17EmpDto();
         emp.setEmpNo(9999);
@@ -35,10 +41,23 @@ class L16EmpDaoImpTest {
     }
 
     @Test
-    void update() {
+    @Order(3)
+    void update() throws Exception {
+        L17EmpDto emp=new L17EmpDto();
+        emp.setEmpNo(9999);
+        emp.setBirthDate("1988-1-27");
+        emp.setGender("F");
+        emp.setFirstName("준");
+        emp.setLastName("어눌도");
+        emp.setHireDate("2024-3-10");
+        int update=new L16EmpDaoImp().update(emp);
+        assertTrue(update > 0);
     }
 
     @Test
-    void deleteById() {
+    @Order(5)
+    void deleteById() throws Exception {
+        int delete=new L16EmpDaoImp().deleteById(9999);
+        assertTrue(delete > 0);
     }
 }

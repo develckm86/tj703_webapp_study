@@ -1,7 +1,4 @@
-package com.tj703.web_app_server_study;
-
-import java.time.LocalDate;
-import java.util.Date;
+package com.tj703.web_app_server_study.model2.dto;
 
 public class L17EmpDto {
     private int empNo;

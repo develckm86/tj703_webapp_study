@@ -1,8 +1,7 @@
-package com.tj703.web_app_server_study;
+package com.tj703.web_app_server_study.model2.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class L15SingletonDB {
     //디자인패턴 : 코드 구성만으로 기능을 구현

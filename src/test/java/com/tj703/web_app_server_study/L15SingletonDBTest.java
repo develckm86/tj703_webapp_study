@@ -1,8 +1,8 @@
 package com.tj703.web_app_server_study;
 
+import com.tj703.web_app_server_study.model2.dao.L15SingletonDB;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 class L15SingletonDBTest {
     //함수단위로 실행할 수 있어서 단위 테스트라 부른다. unit test
     //java unit test == junit
