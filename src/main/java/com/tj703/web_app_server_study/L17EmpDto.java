@@ -13,14 +13,14 @@ public class L17EmpDto {
 
     @Override
     public String toString() {
-        return "L17EmpDto{" +
+        return "{" +
                 "empNo=" + empNo +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthDate='" + birthDate + '\'' +
                 ", gender='" + gender + '\'' +
                 ", hireDate='" + hireDate + '\'' +
-                '}';
+                "}\n";
     }
 
     public int getEmpNo() {

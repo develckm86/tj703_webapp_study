@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class L16EmpDaoImp implements L16EmpDao {
@@ -16,7 +17,22 @@ public class L16EmpDaoImp implements L16EmpDao {
 
     @Override
     public List<L17EmpDto> findAll() throws Exception {
-        return List.of();
+        List<L17EmpDto> empList=null; //array[] list
+        String sql="select * from employees limit 0,100";
+        ps=conn.prepareStatement(sql);
+        rs=ps.executeQuery();
+        empList=new ArrayList<>();
+        while(rs.next()) {
+            L17EmpDto emp=new L17EmpDto();
+            emp.setEmpNo(rs.getInt("emp_no"));
+            emp.setBirthDate(rs.getString("birth_date"));
+            emp.setFirstName(rs.getString("first_name"));
+            emp.setLastName(rs.getString("last_name"));
+            emp.setGender(rs.getString("gender"));
+            emp.setHireDate(rs.getString("hire_date"));
+            empList.add(emp);
+        }
+        return empList;
     }
 
     @Override
@@ -40,7 +56,17 @@ public class L16EmpDaoImp implements L16EmpDao {
 
     @Override
     public int insert(L17EmpDto emp) throws Exception {
-        return 0;
+        int insert=0;
+        String sql="INSERT INTO employees (emp_no, birth_date, first_name, last_name, gender, hire_date)  values (?,?,?,?,?,?)";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, emp.getEmpNo());
+        ps.setString(2, emp.getBirthDate());
+        ps.setString(3, emp.getFirstName());
+        ps.setString(4, emp.getLastName());
+        ps.setString(5, emp.getGender());
+        ps.setString(6, emp.getHireDate());
+        insert=ps.executeUpdate(); //성공시 등록한 수가 반환 1
+        return insert;
     }
 
     @Override
