@@ -36,7 +36,7 @@
           <td><%=e.getFirstName()%>&nbsp;<%=e.getLastName()%></td>
           <td><%=e.getBirthDate()%></td>
           <td>
-            <a href="./model2/empDetail.do?emp_no=<%=e.getEmpNo()%>">상세</a>
+            <a href="./empDetail.do?emp_no=<%=e.getEmpNo()%>">상세</a>
           </td>
         </tr>
       <%}%>
