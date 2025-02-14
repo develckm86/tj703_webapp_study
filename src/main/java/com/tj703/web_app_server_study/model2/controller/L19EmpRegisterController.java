@@ -40,6 +40,8 @@ public class L19EmpRegisterController extends HttpServlet {
             //throw new RuntimeException(e);
             //오류: db생성되지 않은경우, 파라미터가 잘못된경우,....???
             e.printStackTrace();
+        }finally { //한번은 무조건 실행하겠다.
+            if (empDao!=null) {empDao.close();}
         }
 
         if(insert>0){

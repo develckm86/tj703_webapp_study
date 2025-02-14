@@ -35,6 +35,8 @@ public class L18EmpListController extends HttpServlet {
             e.printStackTrace();
             resp.sendError(500);
             return;
+        }finally { //한번은 무조건 실행하겠다.
+            if (empDao!=null) {empDao.close();}
         }
         //forward 될때는 무조건 empList 는 null 이 아니다.
         req.setAttribute("empList", empList);

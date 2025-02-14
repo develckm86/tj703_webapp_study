@@ -10,4 +10,5 @@ public interface L16EmpDao {
     int insert(L17EmpDto emp) throws Exception;
     int update(L17EmpDto emp) throws Exception;
     int deleteById(int empNo) throws Exception;
+    void close();
 }

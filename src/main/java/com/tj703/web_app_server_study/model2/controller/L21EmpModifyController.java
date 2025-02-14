@@ -33,7 +33,10 @@ public class L21EmpModifyController extends HttpServlet {
             update=empDao.update(emp);
         } catch (Exception e) {
             e.printStackTrace();
+        }finally { //한번은 무조건 실행하겠다.
+            if (empDao!=null) {empDao.close();}
         }
+
         //삭제는 직접 구현해보세요~
         if(update>0){
             resp.sendRedirect(successUrl);

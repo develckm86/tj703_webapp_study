@@ -94,4 +94,13 @@ public class L16EmpDaoImp implements L16EmpDao {
         delete=ps.executeUpdate();
         return delete;
     }
+
+    @Override
+    public void close() {
+        try{
+            if(rs!=null) {rs.close();}
+            if(ps!=null) {ps.close();}
+            if(conn!=null) {conn.close();}
+        }catch(Exception e) {e.printStackTrace();}
+    }
 }

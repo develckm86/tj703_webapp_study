@@ -31,7 +31,10 @@ public class L20EmpDetailController extends HttpServlet {
             e.printStackTrace();
             resp.sendError(500);
             return;
+        }finally { //한번은 무조건 실행하겠다.
+            if (dao!=null) {dao.close();}
         }
+
         if(emp==null) { //조회와 동시에 삭제된 경우 -> list 로 이동
             resp.sendRedirect("./empList.do");
         }else{
