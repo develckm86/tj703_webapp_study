@@ -9,7 +9,7 @@ CREATE USER 'usermanager_dev'@'%' IDENTIFIED BY 'mysql';
 
 -- 2. UserManagement 데이터베이스에 조회(SELECT) 및 수정(INSERT, UPDATE) 권한 부여
 GRANT SELECT, INSERT, UPDATE, DELETE ON UserManagement.* TO 'usermanager'@'%';
-GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP ON UserManagement.* TO 'usermanager_dev'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,REFERENCES ON UserManagement.* TO 'usermanager_dev'@'%';
 
 use UserManagement;
 -- 1. 회원 정보 테이블
