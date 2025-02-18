@@ -48,6 +48,7 @@ public class PasswordChangeHistoryDaoImp implements PasswordChangeHistoryDao {
         }
         return list;    }
 
+    //수정할때 같은 비밀번호가 있는지 물어본다.
     @Override
     public List<PasswordChangeHistoryDto> findByPwAndUserId(String pw, int userId) throws Exception {
         List<PasswordChangeHistoryDto> list=null;
