@@ -20,7 +20,13 @@ public class PasswordChangeHistoryDaoImp implements PasswordChangeHistoryDao {
 
     @Override
     public int insert(PasswordChangeHistoryDto dto) throws Exception {
-        return 0;
+        int result=0;
+        String sql="INSERT INTO password_change_history (user_id, old_password) values (?,?)";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, dto.getUserId());
+        ps.setString(2, dto.getOldPassword());
+        result=ps.executeUpdate();
+        return result;
     }
 
     @Override
