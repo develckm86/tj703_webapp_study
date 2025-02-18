@@ -20,12 +20,12 @@ public class UserServiceImp implements UserService {
     private UserDao userDao;
     private LoginLogDao loginLogDao;
     private PasswordChangeHistoryDao pwHistoryDao;
-    //객체지향언어(java)의 단점
+    //객체지향언어(java)의 단점 (수직적)
     // 순서대로 동작  -> 객체를 매개변수로 사용 -> 서비스로직이 더 복잡해진다.
     // 객체를 필요로 하는 곳에 항상 생성 ->
     // 서버환경에서 10000개의 동일한 요청이 들어오면 같은 요청이더라도 최소 10000개의 객체를 생성
 
-    //-> 관점지향 언어로(Spring(base java))
+    //-> 관점지향 언어로(Spring(base java),수평적)
     // 객체를 컨테이너(==singleton pattern)가 따로 생성하고 사용하는 곳에 전달하는 구조
     // 1. 매개변수 없이 동작
     // 2. 만들어진 것이 있으면 같은 요청이 왔을 때 전달
@@ -66,6 +66,8 @@ public class UserServiceImp implements UserService {
             //중간에 오류가 발생하면 commit 지점으로 되돌림 -> 원자성을 유지==Transaction
             throw new RuntimeException(e); //사용하는 쪽에서 오류를 발생
         }finally {
+            //if(rs!=null)
+                //if(ps!=null)
             if(conn!=null){conn.close();}
         }
         return login;
@@ -78,28 +80,49 @@ public class UserServiceImp implements UserService {
         try {
             conn.setAutoCommit(false);
             conn.commit();
-            ///signup(UserDto user) user={email:"test",pw:"1234" userId:xx}
-            int insert=userDao.insert(user);
-            //1.Select last_insert_id() 조회 (auto Increment로 생성된 아이디 조회)
-            //2. 그냥 등록된 유저 조회
+            int insert=userDao.insert(user);//{email:"test",pw:"1234"}
             user=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());
-            PasswordChangeHistoryDto pwHistoryDto=new PasswordChangeHistoryDto();
-            pwHistoryDto.setUserId(user.getUserId());
-            pwHistoryDto.setOldPassword(user.getPassword());
-            int pwInsert= pwHistoryDao.insert(pwHistoryDto);
-            signup=(pwInsert>0 && insert>0);
-            conn.commit(); //등록한 내역이 휘발됨
+            PasswordChangeHistoryDto pwHistory=new PasswordChangeHistoryDto();
+            pwHistory.setUserId(user.getUserId());
+            pwHistory.setOldPassword(user.getPassword());
+            int pwInsert= pwHistoryDao.insert(pwHistory);
+            conn.commit();
+            signup=(insert>0 && pwInsert>0);
         } catch (Exception e) {
             conn.rollback();
             throw new RuntimeException(e);
-        }finally {
-            if(conn!=null){conn.close();}
         }
         return signup;
     }
 
     @Override
     public boolean modifyPw(UserDto user) throws Exception {
-        return false;
+        boolean modifyPw=false;
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+            String newPw=user.getPassword();
+            user=userDao.findByEmail(user.getEmail());
+            //user_id 를 몰라서 조회
+            List<PasswordChangeHistoryDto> pwList=
+                    pwHistoryDao.findByPwAndUserId(newPw,user.getUserId());
+            //pwList.size() > 0 : 이전에 사용한 이력이 있는 비번
+            if(pwList.size()==0){
+                user.setPassword(newPw);
+                int update=userDao.updateSetPwByEmail(user);
+                PasswordChangeHistoryDto pwHistory=new PasswordChangeHistoryDto();
+                pwHistory.setUserId(user.getUserId());
+                pwHistory.setOldPassword(newPw);
+                int pwInsert= pwHistoryDao.insert(pwHistory);
+                modifyPw=(update>0 && pwInsert>0);
+            }
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        }finally {
+            if(conn!=null){conn.close();}
+        }
+        return modifyPw;
     }
 }

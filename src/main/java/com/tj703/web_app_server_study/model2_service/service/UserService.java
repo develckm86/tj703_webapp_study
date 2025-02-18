@@ -19,7 +19,6 @@ public interface UserService {
     //2. UserDto 에 boolean isPwHistory 필드를 정의 (권장하지 않음)
     //3. UserVo(Beans) 를 따로 만들어서 UserDto 필드 + isPwHistory 정의
     //회원가입
-    //0. 이전에 동일한 패스워드 사용한 이력이 있는지 검사
     //1. 회원 등록
     //2. 회원 패스워드 수정 이력 등록 -> error 를 로그로 남김
     // => boolean

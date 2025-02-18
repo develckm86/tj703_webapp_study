@@ -14,14 +14,19 @@ class UserServiceImpTest {
 
     @Test
     void signup() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setEmail("servieSignup@example.com");
-        userDto.setPassword("4321");
-        System.out.println(new UserServiceImp().signup(userDto));
+        UserDto user = new UserDto();
+        user.setEmail("signupTestLast@example.com");
+        user.setPassword("5555");
+        System.out.println(new UserServiceImp().signup(user));
     }
 
     @Test
-    void modifyPw() {
+    void modifyPw() throws Exception {
+        UserDto user = new UserDto();
+        user.setEmail("signupTestLast@example.com");
+        user.setPassword("비밀번호변경");
+        System.out.println(new UserServiceImp().modifyPw(user));
 
     }
+
 }
