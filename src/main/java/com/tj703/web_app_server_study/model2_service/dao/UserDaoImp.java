@@ -56,6 +56,12 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public int insert(UserDto user) throws Exception {
-        return 0;
+        int insert=0;
+        String sql="INSERT  INTO users ( email, password ) VALUES (?,?)";
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, user.getEmail());
+        ps.setString(2, user.getPassword());
+        insert = ps.executeUpdate();
+        return insert;
     }
 }

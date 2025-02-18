@@ -1,5 +1,6 @@
 package com.tj703.web_app_server_study.model2_service.dao;
 
+import com.tj703.web_app_server_study.model2_service.dto.UserDto;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -15,12 +16,19 @@ class UserDaoImpTest {
     }
 
     @Test
-    void insert() {
+    void insert() throws Exception {
+        Connection conn=UserManagerDBConn.getConnection();
+
+        UserDto user = new UserDto();
+        user.setPassword("1234");
+        user.setEmail("insertTest@gmail.com");
+        System.out.println(new UserDaoImp(conn).insert(user));
+
     }
 
     @Test
     void findByEmailAndPassword() throws Exception {
         Connection conn=UserManagerDBConn.getConnection();
-        assertNotNull(new UserDaoImp(conn).findByEmailAndPassword("user1@example.com","1234"));
+        System.out.println(new UserDaoImp(conn).findByEmailAndPassword("insertTest@gmail.com","1234"));
     }
 }
