@@ -23,7 +23,7 @@ public class UserServiceImp implements UserService {
     //객체지향언어(java)의 단점
     // 순서대로 동작  -> 객체를 매개변수로 사용 -> 서비스로직이 더 복잡해진다.
     // 객체를 필요로 하는 곳에 항상 생성 ->
-    // 서버환경에서 10000개의 동일한 요청이 들어오면 같은 요청이더라도 10000개의 객체를 생성
+    // 서버환경에서 10000개의 동일한 요청이 들어오면 같은 요청이더라도 최소 10000개의 객체를 생성
 
     //-> 관점지향 언어로(Spring(base java))
     // 객체를 컨테이너(==singleton pattern)가 따로 생성하고 사용하는 곳에 전달하는 구조
@@ -41,10 +41,10 @@ public class UserServiceImp implements UserService {
     //@Transataional
     @Override
     public Map<String, Object> login(String email, String pw) throws Exception {
+        Map<String, Object> login=new HashMap<>();
         try {
             conn.setAutoCommit(false); //쿼리를 실행할때마다 각 쿼리가 독립성을 갖기 때문
             conn.commit(); //save Point
-            Map<String, Object> login=new HashMap<>();
             UserDto user=userDao.findByEmailAndPassword(email, pw);
             LoginLogDto loginLog=new LoginLogDto();
             loginLog.setUserId(user.getUserId());
@@ -60,7 +60,7 @@ public class UserServiceImp implements UserService {
             login.put("userDto",user);
             login.put("isPwHistory",pwList.size()>0);
             login.put("isInsertLog",insert>0);
-            return login;
+            conn.commit();
         } catch (Exception e) {
             conn.rollback();
             //중간에 오류가 발생하면 commit 지점으로 되돌림 -> 원자성을 유지==Transaction
@@ -68,11 +68,34 @@ public class UserServiceImp implements UserService {
         }finally {
             if(conn!=null){conn.close();}
         }
+        return login;
+
     }
 
     @Override
     public boolean signup(UserDto user) throws Exception {
-        return false;
+        boolean signup=false;
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+            ///signup(UserDto user) user={email:"test",pw:"1234" userId:xx}
+            int insert=userDao.insert(user);
+            //1.Select last_insert_id() 조회 (auto Increment로 생성된 아이디 조회)
+            //2. 그냥 등록된 유저 조회
+            user=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());
+            PasswordChangeHistoryDto pwHistoryDto=new PasswordChangeHistoryDto();
+            pwHistoryDto.setUserId(user.getUserId());
+            pwHistoryDto.setOldPassword(user.getPassword());
+            int pwInsert= pwHistoryDao.insert(pwHistoryDto);
+            signup=(pwInsert>0 && insert>0);
+            conn.commit(); //등록한 내역이 휘발됨
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        }finally {
+            if(conn!=null){conn.close();}
+        }
+        return signup;
     }
 
     @Override
