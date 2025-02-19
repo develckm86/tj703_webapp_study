@@ -1,43 +1,45 @@
 package com.tj703.web_app_server_study.model2_service.dao;
 
 import com.tj703.web_app_server_study.model2_service.dto.UserDto;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class UserDaoImpTest {
-
+    private static Connection conn;
+    private static UserDao userDao;
+    @BeforeAll
+    static void setUpBeforeClass() throws Exception {
+        conn=UserManagerDBConn.getConnection();
+        userDao=new UserDaoImp(conn);
+    }
     @Test
     void findByUserIdAndPassword() throws Exception {
-        Connection conn=UserManagerDBConn.getConnection();
-        System.out.println(new UserDaoImp(conn).findByUserIdAndPassword(1,"1234"));
+        System.out.println(userDao.findByUserIdAndPassword(1,"1234"));
     }
 
     @Test
     void insert() throws Exception {
-        Connection conn=UserManagerDBConn.getConnection();
 
         UserDto user = new UserDto();
         user.setPassword("1234");
-        user.setEmail("insertTest@gmail.com");
-        System.out.println(new UserDaoImp(conn).insert(user));
+        user.setEmail("insertTest2@gmail.com");
+        System.out.println(userDao.insert(user));
 
     }
 
     @Test
     void findByEmailAndPassword() throws Exception {
-        Connection conn=UserManagerDBConn.getConnection();
-        System.out.println(new UserDaoImp(conn).findByEmailAndPassword("insertTest@gmail.com","1234"));
+        System.out.println(userDao.findByEmailAndPassword("insertTest2@gmail.com","5555"));
     }
 
     @Test
     void updateSetPwByEmail() throws Exception {
-        Connection conn=UserManagerDBConn.getConnection();
         UserDto user = new UserDto();
-        user.setPassword("9999");
-        user.setEmail("user1@example.com");
-        System.out.println(new UserDaoImp(conn).updateSetPwByEmail(user));
+        user.setPassword("5555");
+        user.setEmail("insertTest2@gmail.com");
+        System.out.println(userDao.updateSetPwByEmail(user));
     }
+
 }
