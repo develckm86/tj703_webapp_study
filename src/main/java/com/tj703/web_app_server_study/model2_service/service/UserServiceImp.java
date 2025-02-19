@@ -100,6 +100,28 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean modifyPw(UserDto user) throws Exception {
-        return false;
+        boolean modifyPw=false;
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+            //이전에 유저가 바꾸려는 비밀번호와 동일한 비번을 사용한 이력이 있나
+            List<PasswordChangeHistoryDto> pwList=pwHistoryDao.findByPwAndEmail( user.getPassword(), user.getEmail());
+            if(pwList.size()>0){ return modifyPw; }
+
+            int userInsert=userDao.updateSetPwByEmail(user);
+            user=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());
+            PasswordChangeHistoryDto pwHistoryDto=new PasswordChangeHistoryDto();
+            pwHistoryDto.setUserId(user.getUserId());
+            pwHistoryDto.setOldPassword(user.getPassword());
+            int pwInsert= pwHistoryDao.insert(pwHistoryDto);
+            modifyPw=(pwInsert>0 && userInsert>0);
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        }finally {
+            if(conn!=null){conn.close();}
+        }
+        return modifyPw;
     }
 }

@@ -76,4 +76,9 @@ class PasswordChangeHistoryDaoImpTest {
         System.out.println(dao.findByPwAndUserId("1234",3));
 
     }
+
+    @Test
+    void findByPwAndEmail() throws Exception {
+        System.out.println(dao.findByPwAndEmail("4321","servieSignup@example.com"));
+    }
 }

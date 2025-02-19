@@ -10,5 +10,6 @@ public interface PasswordChangeHistoryDao {
     List<PasswordChangeHistoryDto> findByChangeAtAndUserId(String changeAt,int userId) throws Exception;
     //지금 수정하려는 패스워드가 전에 사용한 이력이 있나?
     List<PasswordChangeHistoryDto> findByPwAndUserId(String pw, int userId) throws Exception;
+    List<PasswordChangeHistoryDto> findByPwAndEmail(String pw, String email) throws Exception;
 
 }

@@ -68,4 +68,24 @@ public class PasswordChangeHistoryDaoImp implements PasswordChangeHistoryDao {
         }
         return list;
     }
+
+    @Override
+    public List<PasswordChangeHistoryDto> findByPwAndEmail(String pw, String email) throws Exception {
+        List<PasswordChangeHistoryDto> list=null;
+        String sql="SELECT * FROM password_change_history WHERE user_id=(SELECT user_id FROM users WHERE email=?) AND old_password=?";
+        ps=conn.prepareStatement(sql);
+        ps.setString(1, email);
+        ps.setString(2, pw);
+        rs=ps.executeQuery();
+        list=new ArrayList<>();
+        while(rs.next()){
+            PasswordChangeHistoryDto dto=new PasswordChangeHistoryDto();
+            dto.setUserId(rs.getInt("user_id"));
+            dto.setOldPassword(rs.getString("old_password"));
+            dto.setChangedAt(rs.getString("changed_at"));
+            dto.setChangeId(rs.getInt("change_id"));
+            list.add(dto);
+        }
+        return list;
+    }
 }

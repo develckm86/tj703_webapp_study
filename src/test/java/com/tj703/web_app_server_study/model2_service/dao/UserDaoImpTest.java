@@ -31,4 +31,13 @@ class UserDaoImpTest {
         Connection conn=UserManagerDBConn.getConnection();
         System.out.println(new UserDaoImp(conn).findByEmailAndPassword("insertTest@gmail.com","1234"));
     }
+
+    @Test
+    void updateSetPwByEmail() throws Exception {
+        Connection conn=UserManagerDBConn.getConnection();
+        UserDto user = new UserDto();
+        user.setPassword("9999");
+        user.setEmail("user1@example.com");
+        System.out.println(new UserDaoImp(conn).updateSetPwByEmail(user));
+    }
 }

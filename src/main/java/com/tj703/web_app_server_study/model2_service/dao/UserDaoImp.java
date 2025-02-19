@@ -55,6 +55,17 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
+    public int updateSetPwByEmail(UserDto user) throws Exception {
+        int rows=0;
+        String sql="update users set password=? where email=?";
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, user.getPassword());
+        ps.setString(2, user.getEmail());
+        rows=ps.executeUpdate();
+        return rows;
+    }
+
+    @Override
     public int insert(UserDto user) throws Exception {
         int insert=0;
         String sql="INSERT  INTO users ( email, password ) VALUES (?,?)";

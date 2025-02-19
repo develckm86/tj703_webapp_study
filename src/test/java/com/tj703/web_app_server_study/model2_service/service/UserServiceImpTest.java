@@ -21,7 +21,12 @@ class UserServiceImpTest {
     }
 
     @Test
-    void modifyPw() {
+    void modifyPw() throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setEmail("servieSignup@example.com");
+        userDto.setPassword("5555");
+        System.out.println(new UserServiceImp().modifyPw(userDto));
 
     }
+
 }

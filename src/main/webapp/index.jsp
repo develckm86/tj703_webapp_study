@@ -1,3 +1,4 @@
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +6,26 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
+    <%
+        Cookie [] cookies=request.getCookies();
+        Cookie isBannerCookie=null;
+        for(Cookie c : cookies){
+            if(c.getName().equals("isBannerCookie")){
+                isBannerCookie=c;
+            }
+        }
+   %>
+
+
+    <%
+    if((isBannerCookie==null || !isBannerCookie.getValue().equals("1"))){
+    %>
+    <script>
+        window.open("./L17Banner.jsp","banner","width=300,height=300,left=1500,top=100,scrollbars=no,resizable=no");
+    </script>
+    <%}%>
+
+
     <h1>안녕~ 웹 앱 서버야~ 수정 테스트</h1>
     <br/>
     <h2>수업 링크</h2>
@@ -21,6 +42,9 @@
         <li><a href="L12ViewTemplateJsp.jsp">view template jsp</a></li>
         <li><a href="L13DeptList.jsp">jsp로 구현하는 부서리스트</a></li>
         <li><a href="model2/empList.do"> 모델2로 구현한 사원 리스트 </a></li>
+        <li><a href="./setCookie.do">쿠키 만들기 예제</a></li>
+        <li><a href="./getCookie.do">쿠키 불러오기 예제</a></li>
+
     </ul>
     <div>
         <h3>GET과 POST 차이점과 요청해더(request header body) 정보</h3>
