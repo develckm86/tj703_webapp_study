@@ -21,11 +21,9 @@
     if((isBannerCookie==null || !isBannerCookie.getValue().equals("1"))){
     %>
     <script>
-        window.open("./L17Banner.jsp","banner","width=300,height=300,left=1500,top=100,scrollbars=no,resizable=no");
+        window.open("./L17Banner.jsp","_blank","width=300,height=300,left=1500,top=100,scrollbars=no,resizable=no");
     </script>
     <%}%>
-
-
     <h1>안녕~ 웹 앱 서버야~ 수정 테스트</h1>
     <br/>
     <h2>수업 링크</h2>

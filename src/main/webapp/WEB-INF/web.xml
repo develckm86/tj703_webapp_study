@@ -3,4 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+    <!-- @ServletMapping(/setSession.do)  => DD에 자동으로 생성함   -->
+    <servlet>
+        <servlet-name>setSession</servlet-name>
+        <servlet-class>com.tj703.web_app_server_study.L19Session</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>setSession</servlet-name>
+        <url-pattern>/setSession.do</url-pattern>
+    </servlet-mapping>
 </web-app>
