@@ -1,10 +1,13 @@
 package com.tj703.web_app_server_study.model2_service.service;
 
+import com.tj703.web_app_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.web_app_server_study.model2_service.dto.UserDto;
+import com.tj703.web_app_server_study.model2_service.dto.UserServiceLoginDto;
 
 import java.util.Map;
 
 public interface UserService {
+    UserServiceLoginDto login (UserDto user, LoginLogDto loginLog) throws Exception;
     Map<String,Object> login (String email, String pw, String ip, String agent) throws Exception;
     boolean signup(UserDto user) throws Exception;
     boolean modifyPw(UserDto user) throws Exception;

@@ -4,6 +4,7 @@ import com.tj703.web_app_server_study.model2_service.dao.*;
 import com.tj703.web_app_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.web_app_server_study.model2_service.dto.PasswordChangeHistoryDto;
 import com.tj703.web_app_server_study.model2_service.dto.UserDto;
+import com.tj703.web_app_server_study.model2_service.dto.UserServiceLoginDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +39,34 @@ public class UserServiceImp implements UserService {
         loginLogDao=new LoginLogDaoImp(conn);
         pwHistoryDao=new PasswordChangeHistoryDaoImp(conn);
     }
+
+    @Override
+    public UserServiceLoginDto login(UserDto user, LoginLogDto loginLog) throws Exception {
+        UserServiceLoginDto login=null;
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+            UserDto loginUser=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());
+            if (loginUser==null) {return login;}
+            loginLog.setUserId(loginUser.getUserId());
+            int loginInsert=loginLogDao.insert(loginLog);
+            List<PasswordChangeHistoryDto> pwHistoryList=null;
+            LocalDate now=LocalDate.now();
+            String prevSixMonth=now.minusMonths(6).toString();
+            pwHistoryList=pwHistoryDao.findByChangeAtAndUserId( prevSixMonth,loginUser.getUserId());
+            login=new UserServiceLoginDto();
+            login.setUser(loginUser);
+            login.setPwHistory(pwHistoryList.size()>0);
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        }finally {
+            if(conn!=null){conn.close();}
+        }
+        return login;
+    }
+
     //@Transataional
     @Override
     public Map<String, Object> login(String email, String pw, String ip, String agent) throws Exception {

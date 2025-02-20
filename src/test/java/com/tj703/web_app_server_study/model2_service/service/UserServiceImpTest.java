@@ -1,5 +1,6 @@
 package com.tj703.web_app_server_study.model2_service.service;
 
+import com.tj703.web_app_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.web_app_server_study.model2_service.dto.UserDto;
 import org.junit.jupiter.api.Test;
 
@@ -29,4 +30,14 @@ class UserServiceImpTest {
 
     }
 
+    @Test
+    void testLogin() throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setEmail("user2@example.com");
+        userDto.setPassword("5555");
+        LoginLogDto loginLogDto=new LoginLogDto();
+        loginLogDto.setUserAgent("chrome");
+        loginLogDto.setIpAddress("localhost");
+        System.out.println(new UserServiceImp().login(userDto,loginLogDto));
+    }
 }
