@@ -1,6 +1,8 @@
 package com.tj703.web_app_server_study.model2_service.controller;
 
+import com.tj703.web_app_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.web_app_server_study.model2_service.dto.UserDto;
+import com.tj703.web_app_server_study.model2_service.dto.UserServiceLoginDto;
 import com.tj703.web_app_server_study.model2_service.service.UserServiceImp;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -35,8 +37,6 @@ public class UserLoginController extends HttpServlet {
         //5.만약 중간에 오류 (1.500에러,2.로그인 중 오류가 발생했습니다. 다시시도하세요.3.에러메세지를 그대로 노출 X)
 
         String msg=null; //세션에 msg 보내서 view에서 msg가 있을때 alert 으로 경로 후 메세지 삭제
-        UserDto loginUser=null;
-        boolean isPwHistory=false;
         //클라이언트가 접속한 ip와 브라우저 조회
         String ipAddress=req.getRemoteAddr();
         String userAgent=req.getHeader("User-Agent");
@@ -46,36 +46,34 @@ public class UserLoginController extends HttpServlet {
         System.out.println("userAgent:"+userAgent);
         System.out.println("browser:"+browser);
 
+        UserServiceLoginDto loginDto=null;
 
         try {
-            Map<String,Object> map=null;
-            map=new UserServiceImp().login(email,password,ipAddress,agents[1]);
-
-            Object loginUserObj=map.get("userDto");
-            Object isPwHistoryObj=map.get("isPwHistory");
-
-            loginUser=(loginUserObj!=null)?(UserDto)loginUserObj:null;
-            isPwHistory=(isPwHistoryObj!=null)?(Boolean)isPwHistoryObj:false;
-
-        } catch (Exception e) {
-            //throw new RuntimeException(e);
+            UserDto user=new UserDto();
+            user.setEmail(email);
+            user.setPassword(password);
+            LoginLogDto log=new LoginLogDto();
+            log.setIpAddress(ipAddress);
+            log.setUserAgent(agents[1]);
+            loginDto=new UserServiceImp().login(user,log);
+            System.out.println(loginDto);
+            //로그인 실패시 loginDto==null
+        }catch (Exception e) {
             e.printStackTrace();
             resp.sendError(500);
             return;
         }
-        if(loginUser!=null){ //login성공
-
+        if(loginDto!=null && loginDto.getUser()!=null) {
+            //로그인 성공
             HttpSession session=req.getSession();
-            session.setAttribute("loginUser",loginUser);
-
-            if(!isPwHistory){ //6개월 사이에 비밀번호를 바꾼 이력이 없음
-                resp.sendRedirect("./pwModify.do");
-            }else{
+            session.setAttribute("loginUser",loginDto.getUser());
+            if(loginDto.isPwHistory()){
                 resp.sendRedirect(req.getContextPath()+"/");
+            }else {
+                resp.sendRedirect(req.getContextPath()+"/service/pwModify.do");
             }
-        }else{ //login실패
-            resp.sendRedirect("./login.do");
+        }else{
+            resp.sendRedirect(req.getContextPath()+"/service/login.do");
         }
-
     }
 }
