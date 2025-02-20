@@ -5,6 +5,8 @@
 </head>
 <body>
   <div>
+    <%@include file="/WEB-INF/views/service/header.jsp"%>
+
     <h1>UserManagement login Form</h1>
     <form action="./login.do" method="post">
       <p>

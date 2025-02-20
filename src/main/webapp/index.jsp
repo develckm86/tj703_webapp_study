@@ -1,3 +1,4 @@
+<%@ page import="com.tj703.web_app_server_study.model2_service.dto.UserDto" %>
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <title>JSP - Hello World</title>
 </head>
-<body>
+<body style="padding: 0;margin: 0;">
     <%
         Cookie [] cookies=request.getCookies();
         Cookie isBannerCookie=null;
@@ -24,6 +25,9 @@
         window.open("./L17Banner.jsp","_blank","width=300,height=300,left=1500,top=100,scrollbars=no,resizable=no");
     </script>
     <%}%>
+    <%--  서버 내부에서 / root 상대 경로는 /webapp/ 하위   --%>
+    <%@include file="/WEB-INF/views/service/header.jsp"%>
+
     <h1>안녕~ 웹 앱 서버야~ 수정 테스트</h1>
     <br/>
     <h2>수업 링크</h2>
