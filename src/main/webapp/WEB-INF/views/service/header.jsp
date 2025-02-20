@@ -1,9 +1,14 @@
 <%@ page import="com.tj703.web_app_server_study.model2_service.dto.UserDto" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page pageEncoding="UTF-8" %>
 <%
     Object loginUserObj=session.getAttribute("loginUser");
     //UserDto loginUser=(UserDto) loginUserObj; //loginUserObj==null 이면 오류
+    Object msgObj=session.getAttribute("msg");
 %>
+<% if(msgObj!=null){
+    session.removeAttribute("msg");
+    out.println("<script>alert('"+msgObj+"')</script>");
+}%>
 <header style="
             padding:0 1em;
             width: 100%;
