@@ -9,7 +9,7 @@ class UserServiceImpTest {
 
     @Test
     void login() throws Exception {
-        System.out.println(new UserServiceImp().login("user2@example.com","1234"));
+        System.out.println(new UserServiceImp().login("user2@example.com","1234","",""));
     }
 
     @Test

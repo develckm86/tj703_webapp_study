@@ -43,15 +43,16 @@
         <li><a href="./setCookie.do">쿠키 만들기 예제</a></li>
         <li><a href="./getCookie.do">쿠키 불러오기 예제</a></li>
         <li><a href="./setSession.do">세션 만들기 예제</a></li>
-        <p>
-            <%
-                //HttpSession session=request.getSession();
-                Object emailObj=session.getAttribute("email");
-                Object nameObj=session.getAttribute("name");
-            %>
-            <b><%=emailObj%>(<%=nameObj%>)님 로그인 중</b>
-        </p>
+        <li><a href="./service/login.do">UserManagement DB 유저 로그인 예제</a></li>
     </ul>
+    <p>
+        <%
+            //HttpSession session=request.getSession();
+            Object emailObj=session.getAttribute("email");
+            Object nameObj=session.getAttribute("name");
+        %>
+        <b><%=emailObj%>(<%=nameObj%>)님 로그인 중</b>
+    </p>
     <div>
         <h3>GET과 POST 차이점과 요청해더(request header body) 정보</h3>
         <p>GET : 브라우저에서  link 나 url 로  서버에 리소스를 요청하는 행위 -> 리소스 주세요! </p>

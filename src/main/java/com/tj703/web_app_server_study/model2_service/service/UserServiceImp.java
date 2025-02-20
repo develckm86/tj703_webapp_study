@@ -40,21 +40,24 @@ public class UserServiceImp implements UserService {
     }
     //@Transataional
     @Override
-    public Map<String, Object> login(String email, String pw) throws Exception {
+    public Map<String, Object> login(String email, String pw, String ip, String agent) throws Exception {
         Map<String, Object> login=new HashMap<>();
         try {
             conn.setAutoCommit(false); //쿼리를 실행할때마다 각 쿼리가 독립성을 갖기 때문
             conn.commit(); //save Point
             UserDto user=userDao.findByEmailAndPassword(email, pw);
+            if(user==null){return login;}
+            //로그인을 실패하면 로그를 남기거나 히스토리를 조회하지 않는다.
             LoginLogDto loginLog=new LoginLogDto();
             loginLog.setUserId(user.getUserId());
-            loginLog.setIpAddress("127.0.0.1");
-            loginLog.setUserAgent("Mozilla");
+            loginLog.setIpAddress(ip);
+            loginLog.setUserAgent(agent);
             int insert=loginLogDao.insert(loginLog);
 
             LocalDate now=LocalDate.now();
             String prevSixMonth=now.minusMonths(6).toString();
-            //2024-08-18
+            //2024-08-20
+            //2025-05-20
             List<PasswordChangeHistoryDto> pwList=
                     pwHistoryDao.findByChangeAtAndUserId(prevSixMonth,user.getUserId());
             login.put("userDto",user);

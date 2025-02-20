@@ -5,7 +5,7 @@ import com.tj703.web_app_server_study.model2_service.dto.UserDto;
 import java.util.Map;
 
 public interface UserService {
-    Map<String,Object> login (String email, String pw) throws Exception;
+    Map<String,Object> login (String email, String pw, String ip, String agent) throws Exception;
     boolean signup(UserDto user) throws Exception;
     boolean modifyPw(UserDto user) throws Exception;
 
