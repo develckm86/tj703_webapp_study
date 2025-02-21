@@ -47,8 +47,10 @@ public class UserServiceImp implements UserService {
         try {
             conn.setAutoCommit(false);
             conn.commit();
-            UserDto loginUser=userDao.findByEmailAndPassword(user.getEmail(), user.getPassword());
-            if (loginUser==null) {return login;}
+            UserDto loginUser=userDao.findByEmail(user.getEmail());
+
+            if ( loginUser==null || !BCrypt.checkpw(user.getPassword(), loginUser.getPassword())) {return login;}
+
             loginLog.setUserId(loginUser.getUserId());
             int loginInsert=loginLogDao.insert(loginLog);
             List<PasswordChangeHistoryDto> pwHistoryList=null;
@@ -68,6 +70,11 @@ public class UserServiceImp implements UserService {
         return login;
     }
 
+    @Override
+    public UserServiceLoginDto AutoLogin(UserDto user, LoginLogDto loginLog) throws Exception {
+        return null;
+    }
+
     //@Transataional
     @Override
     public Map<String, Object> login(String email, String pw, String ip, String agent) throws Exception {
@@ -75,13 +82,16 @@ public class UserServiceImp implements UserService {
         try {
             conn.setAutoCommit(false); //쿼리를 실행할때마다 각 쿼리가 독립성을 갖기 때문
             conn.commit(); //save Point
-            UserDto user=userDao.findByEmailAndPassword(email, pw);
-            if(user==null){return login;}
-            /*BCrypt 함호화가 되어 있는 경우
-                UserDto user=userDao.findByEmailAndPassword(email)
-                Boolean checkLogin=BCrypt.checkPw(paramPw,user.getPw())
-            */
+            UserDto user=userDao.findByEmail(email);
 
+
+           // if(user==null){return login;}
+            /*BCrypt 암호화가 되어 있는 경우  == user.getPw()가 해시코드다 */
+            //pw="1234" 평문
+            System.out.println(pw);
+            System.out.println(user);
+
+            if( user==null || !BCrypt.checkpw(pw,user.getPassword()) ){return login;}
 
             //로그인을 실패하면 로그를 남기거나 히스토리를 조회하지 않는다.
             LoginLogDto loginLog=new LoginLogDto();

@@ -55,6 +55,23 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
+    public UserDto findByEmail(String email) throws Exception {
+        UserDto user = null;
+        String sql="select * from users where email=?";
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, email);
+        rs = ps.executeQuery();
+        if(rs.next()) {
+            user = new UserDto();
+            user.setUserId(rs.getInt("user_id"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setCreatedAt(rs.getString("created_at"));
+        }
+        return user;
+    }
+
+    @Override
     public int updateSetPwByEmail(UserDto user) throws Exception {
         int rows=0;
         String sql="update users set password=? where email=?";

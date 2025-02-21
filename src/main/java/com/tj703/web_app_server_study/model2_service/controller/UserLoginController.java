@@ -28,18 +28,6 @@ public class UserLoginController extends HttpServlet {
         String autoLogin = req.getParameter("auto_login");
         String autoEmail = req.getParameter("auto_email");
 
-        //autoLogin이 있고 1이면 쿠키 생성
-        //이 쿠키로  AutoLoginFilter 에서 자동 로그인 구현
-        String bcryptPw=BCrypt.hashpw(password, BCrypt.gensalt());
-        Cookie autoLoginCookie = new Cookie("auto_login", autoLogin);
-        Cookie autoEmailCookie = new Cookie("auto_email", email);
-        Cookie autoPwCookie = new Cookie("auto_password", bcryptPw);
-        autoLoginCookie.setMaxAge(60*60*24*30);
-        autoEmailCookie.setMaxAge(60*60*24*30);
-        autoPwCookie.setMaxAge(60*60*24*30);
-        resp.addCookie(autoLoginCookie);
-        resp.addCookie(autoEmailCookie);
-        resp.addCookie(autoPwCookie);
         //로그인 컨트롤러에서 제일 중요한 부분
         //1.파라미터 받아오기
         //2.service 에게 해당 유저가 있는지 물어보기
@@ -79,6 +67,24 @@ public class UserLoginController extends HttpServlet {
             //로그인 성공
             HttpSession session=req.getSession();
             session.setAttribute("loginUser",loginDto.getUser());
+            if(autoLogin!=null && autoLogin.equals("1")) {
+                //autoLogin이 있고 1이면 쿠키 생성
+                //String pwHash=((UserDto)login.get("userDto")).getPassword();
+                String pwHash=loginDto.getUser().getPassword();
+                Cookie autoLoginCookie = new Cookie("auto_login", autoLogin);
+                Cookie autoEmailCookie = new Cookie("auto_email", email);
+                Cookie autoPwCookie = new Cookie("auto_password", pwHash);
+                autoLoginCookie.setPath("/");
+                autoEmailCookie.setPath("/");
+                autoPwCookie.setPath("/");
+                autoLoginCookie.setMaxAge(60*60*24*30);
+                autoEmailCookie.setMaxAge(60*60*24*30);
+                autoPwCookie.setMaxAge(60*60*24*30);
+                resp.addCookie(autoLoginCookie);
+                resp.addCookie(autoEmailCookie);
+                resp.addCookie(autoPwCookie);
+            }
+
             if(loginDto.isPwHistory()){
                 resp.sendRedirect(req.getContextPath()+"/");
             }else {

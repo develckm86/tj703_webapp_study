@@ -7,7 +7,11 @@ import com.tj703.web_app_server_study.model2_service.dto.UserServiceLoginDto;
 import java.util.Map;
 
 public interface UserService {
+    //평문 비밀번호
     UserServiceLoginDto login (UserDto user, LoginLogDto loginLog) throws Exception;
+    //해시코드 비밀번호
+    UserServiceLoginDto AutoLogin (UserDto user, LoginLogDto loginLog) throws Exception;
+
     Map<String,Object> login (String email, String pw, String ip, String agent) throws Exception;
     boolean signup(UserDto user) throws Exception;
     boolean modifyPw(UserDto user) throws Exception;

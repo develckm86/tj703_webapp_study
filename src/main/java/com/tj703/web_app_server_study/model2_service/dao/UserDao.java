@@ -6,6 +6,7 @@ public interface UserDao {
     //UserDto findByIdAndPw(String id, String pw);
     UserDto findByUserIdAndPassword(int id, String pw) throws Exception;
     UserDto findByEmailAndPassword(String email, String pw) throws Exception;
+    UserDto findByEmail(String email) throws Exception;
     int updateSetPwByEmail(UserDto user) throws Exception;
     int insert(UserDto user) throws Exception;
     //서비스웹앱

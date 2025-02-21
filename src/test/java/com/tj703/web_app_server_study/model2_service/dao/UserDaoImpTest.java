@@ -42,4 +42,8 @@ class UserDaoImpTest {
         System.out.println(userDao.updateSetPwByEmail(user));
     }
 
+    @Test
+    void findByEmail() throws Exception {
+        System.out.println(userDao.findByEmail("user1@example.com"));
+    }
 }
