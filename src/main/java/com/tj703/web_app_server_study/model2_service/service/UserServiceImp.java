@@ -71,8 +71,33 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserServiceLoginDto AutoLogin(UserDto user, LoginLogDto loginLog) throws Exception {
-        return null;
+    public UserServiceLoginDto autoLogin(UserDto user, LoginLogDto loginLog) throws Exception {
+        UserServiceLoginDto login=null;
+        try {
+            conn.setAutoCommit(false);
+            conn.commit();
+            //mysql 에 저장된 pw HashCode와 cookie에 저장된 pw Hash 가 같은지 비교
+            UserDto loginUser=userDao.findByEmailAndPassword(user.getEmail(),user.getPassword());
+
+            if ( loginUser==null) {return login;}
+
+            loginLog.setUserId(loginUser.getUserId());
+            int loginInsert=loginLogDao.insert(loginLog);
+            List<PasswordChangeHistoryDto> pwHistoryList=null;
+            LocalDate now=LocalDate.now();
+            String prevSixMonth=now.minusMonths(6).toString();
+            pwHistoryList=pwHistoryDao.findByChangeAtAndUserId( prevSixMonth,loginUser.getUserId());
+            login=new UserServiceLoginDto();
+            login.setUser(loginUser);
+            login.setPwHistory(pwHistoryList.size()>0);
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw new RuntimeException(e);
+        }finally {
+            if(conn!=null){conn.close();}
+        }
+        return login;
     }
 
     //@Transataional

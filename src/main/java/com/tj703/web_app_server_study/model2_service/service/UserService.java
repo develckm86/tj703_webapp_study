@@ -10,7 +10,7 @@ public interface UserService {
     //평문 비밀번호
     UserServiceLoginDto login (UserDto user, LoginLogDto loginLog) throws Exception;
     //해시코드 비밀번호
-    UserServiceLoginDto AutoLogin (UserDto user, LoginLogDto loginLog) throws Exception;
+    UserServiceLoginDto autoLogin(UserDto user, LoginLogDto loginLog) throws Exception;
 
     Map<String,Object> login (String email, String pw, String ip, String agent) throws Exception;
     boolean signup(UserDto user) throws Exception;
