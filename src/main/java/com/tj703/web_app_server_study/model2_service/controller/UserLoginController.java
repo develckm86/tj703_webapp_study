@@ -17,6 +17,15 @@ import java.util.Map;
 public class UserLoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if(c.getName().equals("auto_input_email")) {
+                    req.setAttribute("auto_input_email", c.getValue());
+                }
+            }
+        }
+
         req.getRequestDispatcher("/WEB-INF/views/service/login.jsp").forward(req, resp);
     }
 
@@ -67,6 +76,13 @@ public class UserLoginController extends HttpServlet {
             //로그인 성공
             HttpSession session=req.getSession();
             session.setAttribute("loginUser",loginDto.getUser());
+            if(autoEmail!=null && autoEmail.equals("1")){
+                Cookie autoEmailCookie=new Cookie("auto_input_email",email);
+                autoEmailCookie.setMaxAge(60*60*24*7);
+                autoEmailCookie.setPath("/");
+                resp.addCookie(autoEmailCookie);
+
+            }
             if(autoLogin!=null && autoLogin.equals("1")) {
                 //autoLogin이 있고 1이면 쿠키 생성
                 //String pwHash=((UserDto)login.get("userDto")).getPassword();

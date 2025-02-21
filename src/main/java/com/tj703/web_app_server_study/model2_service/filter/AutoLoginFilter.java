@@ -22,9 +22,12 @@ public class AutoLoginFilter implements Filter {
         Cookie autoLogin=null;
         Cookie autoEmail=null;
         Cookie autoPw=null;
-
-        if(req.getSession().getAttribute("autoLogin") != null) {
+        HttpSession session=req.getSession();
+        Object loginUserObj=session.getAttribute("loginUser");
+        //로그인 중일 때는 자동 로그인 하지 않는다.
+        if(loginUserObj!=null ) {
             filterChain.doFilter(servletRequest, servletResponse);
+            session.removeAttribute("isLogout");
             return;
             //로그인이 되어 있으면 자동로그인을 하지 않음
         }
@@ -38,9 +41,6 @@ public class AutoLoginFilter implements Filter {
                 }
             }
         }
-        System.out.println("autoLogin:"+autoLogin.getValue());
-        System.out.println("autoEmail:"+autoEmail.getValue());
-        System.out.println("autoPw:"+autoPw.getValue());
         if(autoLogin!=null && autoLogin.getValue().equals("1")){
             try {
                 String ip=req.getRemoteAddr();
@@ -56,7 +56,6 @@ public class AutoLoginFilter implements Filter {
                 System.out.println("loginDto:"+loginDto);
                 if(loginDto!=null && loginDto.getUser()!=null){
                     //로그인 성공
-                    HttpSession session=req.getSession();
                     session.setAttribute("loginUser",loginDto.getUser());
                     if(!loginDto.isPwHistory()){
                         HttpServletResponse resp=((HttpServletResponse)servletResponse);

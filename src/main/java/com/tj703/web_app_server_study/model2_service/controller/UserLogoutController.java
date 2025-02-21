@@ -2,10 +2,7 @@ package com.tj703.web_app_server_study.model2_service.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
@@ -19,6 +16,16 @@ public class UserLogoutController extends HttpServlet {
         session.removeAttribute("loginUser");
         //session.invalidate();
         //다수의 객체로 로그인을 할때는 session 을 완전히 만료시키는 방법도 있다.
+        Cookie [] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("auto_login") || c.getName().equals("auto_email") || c.getName().equals("auto_password"))  {
+                    c.setMaxAge(0);
+                    c.setPath("/");
+                    resp.addCookie(c);
+                }
+            }
+        }
         resp.sendRedirect(req.getContextPath() + "/");
     }
 }

@@ -6,17 +6,30 @@
 <body>
   <div>
     <%@include file="/WEB-INF/views/service/header.jsp"%>
-
+    <%
+      Cookie[] cookies = request.getCookies();
+      String autoInputEmail=null;
+      if (cookies != null) {
+        for (Cookie c : cookies) {
+          if(c.getName().equals("auto_input_email")) {
+            autoInputEmail=c.getValue();
+          }
+        }
+      }
+      if(autoInputEmail==null){
+        autoInputEmail="";
+      }
+    %>
     <h1>UserManagement login Form</h1>
     <form action="./login.do" method="post">
       <p>
         <label>
-          <b>이메일</b><input type="text" name="email" value="user1@example.com" />
+          <b>이메일</b><input type="text" name="email" value="<%=autoInputEmail%>" />
         </label>
       </p>
       <p>
         <label>
-          <b>비밀번호</b><input type="password" name="password" value="9999" />
+          <b>비밀번호</b><input type="password" name="password" value="" />
         </label>
       </p>
       <p>
