@@ -18,7 +18,7 @@ public class L18SetBannerCookie extends HttpServlet {
         String isBannerCookie = req.getParameter("isBannerCookie"); //"1"
         resp.setContentType("text/html");
         Cookie cookie = new Cookie("isBannerCookie", isBannerCookie);
-        cookie.setMaxAge(60*5);
+        cookie.setMaxAge(60*60*24);
         resp.addCookie(cookie);
         PrintWriter out = resp.getWriter();
         out.println("<script> window.close();</script>");

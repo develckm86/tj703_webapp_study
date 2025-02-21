@@ -6,10 +6,8 @@ import com.tj703.web_app_server_study.model2_service.dto.UserServiceLoginDto;
 import com.tj703.web_app_server_study.model2_service.service.UserServiceImp;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,6 +27,19 @@ public class UserLoginController extends HttpServlet {
         String password = req.getParameter("password");
         String autoLogin = req.getParameter("auto_login");
         String autoEmail = req.getParameter("auto_email");
+
+        //autoLogin이 있고 1이면 쿠키 생성
+        //이 쿠키로  AutoLoginFilter 에서 자동 로그인 구현
+        String bcryptPw=BCrypt.hashpw(password, BCrypt.gensalt());
+        Cookie autoLoginCookie = new Cookie("auto_login", autoLogin);
+        Cookie autoEmailCookie = new Cookie("auto_email", email);
+        Cookie autoPwCookie = new Cookie("auto_password", bcryptPw);
+        autoLoginCookie.setMaxAge(60*60*24*30);
+        autoEmailCookie.setMaxAge(60*60*24*30);
+        autoPwCookie.setMaxAge(60*60*24*30);
+        resp.addCookie(autoLoginCookie);
+        resp.addCookie(autoEmailCookie);
+        resp.addCookie(autoPwCookie);
         //로그인 컨트롤러에서 제일 중요한 부분
         //1.파라미터 받아오기
         //2.service 에게 해당 유저가 있는지 물어보기
@@ -56,6 +67,7 @@ public class UserLoginController extends HttpServlet {
             log.setIpAddress(ipAddress);
             log.setUserAgent(agents[1]);
             loginDto=new UserServiceImp().login(user,log);
+            //받아온 pw 를 cookie로 사용
             System.out.println(loginDto);
             //로그인 실패시 loginDto==null
         }catch (Exception e) {

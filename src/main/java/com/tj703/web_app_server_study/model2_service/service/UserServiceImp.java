@@ -5,6 +5,7 @@ import com.tj703.web_app_server_study.model2_service.dto.LoginLogDto;
 import com.tj703.web_app_server_study.model2_service.dto.PasswordChangeHistoryDto;
 import com.tj703.web_app_server_study.model2_service.dto.UserDto;
 import com.tj703.web_app_server_study.model2_service.dto.UserServiceLoginDto;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -76,6 +77,12 @@ public class UserServiceImp implements UserService {
             conn.commit(); //save Point
             UserDto user=userDao.findByEmailAndPassword(email, pw);
             if(user==null){return login;}
+            /*BCrypt 함호화가 되어 있는 경우
+                UserDto user=userDao.findByEmailAndPassword(email)
+                Boolean checkLogin=BCrypt.checkPw(paramPw,user.getPw())
+            */
+
+
             //로그인을 실패하면 로그를 남기거나 히스토리를 조회하지 않는다.
             LoginLogDto loginLog=new LoginLogDto();
             loginLog.setUserId(user.getUserId());
@@ -137,6 +144,7 @@ public class UserServiceImp implements UserService {
             conn.setAutoCommit(false);
             conn.commit();
             //이전에 유저가 바꾸려는 비밀번호와 동일한 비번을 사용한 이력이 있나
+
             List<PasswordChangeHistoryDto> pwList=pwHistoryDao.findByPwAndEmail( user.getPassword(), user.getEmail());
             if(pwList.size()>0){ return modifyPw; }
 
